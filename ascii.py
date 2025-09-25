@@ -107,8 +107,8 @@ def play_ascii_animation(frames: List[Image.Image], durations: List[float], max_
                 
                 print(ascii_frame, flush=True)
                 
-                # Sleep for frame duration (minimum 0.1 seconds for readability)
-                sleep_time = max(0.1, duration * 2)
+                # Sleep for frame duration (minimum 0.03 seconds for readability)
+                sleep_time = max(0.03, duration * 0.5)
                 time.sleep(sleep_time)
                 
                 frame_count += 1
