@@ -14,3 +14,9 @@ try
 ```
 python ascii.py duck.gif
 ```
+
+set speed with (higher = slower. idk claude did this lol)
+```
+python ascii.py torchic.gif --speed 1.0
+```
+
