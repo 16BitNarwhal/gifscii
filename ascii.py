@@ -39,7 +39,7 @@ def image_to_ascii(image: Image.Image, max_width: int = 80, max_height: int = 24
 
     # Resize image
     image = image.resize((width, height))
-    
+
     # Convert to grayscale
     image = image.convert('L')
     
@@ -81,7 +81,7 @@ def clear_screen() -> None:
     """Clear the terminal screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def play_ascii_animation(frames: List[Image.Image], durations: List[float], max_width: int, max_height: int) -> None:
+def play_ascii_animation(frames: List[Image.Image], durations: List[float], max_width: int, max_height: int, speed: float = 0.5) -> None:
     """Play ASCII animation in the terminal."""
     ascii_frames = []
 
@@ -90,10 +90,10 @@ def play_ascii_animation(frames: List[Image.Image], durations: List[float], max_
         ascii_frame = image_to_ascii(frame, max_width, max_height)
         ascii_frames.append(ascii_frame)
         print(f"\rProgress: {i+1}/{len(frames)}", end='', flush=True)
-    
+
     print("\nStarting animation... (Press Ctrl+C to stop)")
     time.sleep(1)
-    
+
     try:
         frame_count = 0
         while True:  # Loop forever
@@ -104,13 +104,13 @@ def play_ascii_animation(frames: List[Image.Image], durations: List[float], max_
                 else:
                     # Move cursor to top-left
                     print('\033[H', end='')
-                
+
                 print(ascii_frame, flush=True)
-                
+
                 # Sleep for frame duration (minimum 0.03 seconds for readability)
-                sleep_time = max(0.03, duration * 0.5)
+                sleep_time = max(0.03, duration * speed)
                 time.sleep(sleep_time)
-                
+
                 frame_count += 1
     
     except KeyboardInterrupt:
@@ -129,7 +129,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description='Convert GIF to ASCII terminal animation')
     parser.add_argument('gif_file', help='Path to the GIF file')
     parser.add_argument('width', nargs='?', type=int, help='ASCII art width (default: terminal width)')
-    
+    parser.add_argument('--speed', type=float, default=0.5, help='Animation speed multiplier (default: 0.5, higher = slower)')
+
     args = parser.parse_args()
     
     if not os.path.exists(args.gif_file):
@@ -160,7 +161,7 @@ def main() -> None:
     print(f"Found {len(frames)} frames")
 
     # Play the animation
-    play_ascii_animation(frames, durations, max_width, max_height)
+    play_ascii_animation(frames, durations, max_width, max_height, args.speed)
 
 if __name__ == "__main__":
     main()
